@@ -164,17 +164,11 @@ For programmatic consumption, dimensions can output JSON:
 }
 ```
 
-## Severity Badge Format
+## Severity Text Format
 
-Use these badges in markdown reports:
+Use plain text severity labels in reports:
 
-- Critical: `![Critical](https://img.shields.io/badge/Severity-Critical-red)`
-- High: `![High](https://img.shields.io/badge/Severity-High-orange)`
-- Medium: `![Medium](https://img.shields.io/badge/Severity-Medium-yellow)`
-- Low: `![Low](https://img.shields.io/badge/Severity-Low-blue)`
-
-Or inline text:
-- **CRITICAL** 🔴
-- **HIGH** 🟠
-- **MEDIUM** 🟡
-- **LOW** 🔵
+- **Critical**
+- **High**
+- **Medium**
+- **Low**

@@ -184,7 +184,7 @@ def generate_consolidated_report(results: List[Dict]) -> str:
     lines.append("")
     lines.append("### Immediate Actions (Critical/High)")
     lines.append("1. Address all Critical issues before deployment")
-    lines.append("2. Schedule High severity fixes within 24-48 hours")
+    lines.append("2. Schedule High severity fixes as near-term work based on production risk")
     lines.append("")
     lines.append("### Short-term Improvements (Medium)")
     lines.append("1. Plan Medium severity fixes for current sprint")

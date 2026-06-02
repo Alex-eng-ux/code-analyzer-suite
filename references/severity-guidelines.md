@@ -15,7 +15,7 @@ Every issue identified during code analysis must be assigned one of four severit
 - Security breach exposing sensitive data
 - Compliance violation (GDPR, HIPAA, SOC2)
 
-**Action Required**: Fix immediately before deployment. Stop release if found in production.
+**Action Guidance**: Fix before deployment when the affected path is in scope. Escalate immediately if found in production.
 
 **Examples**:
 - SQL injection in authentication endpoint
@@ -35,7 +35,7 @@ Every issue identified during code analysis must be assigned one of four severit
 - Missing critical error handling
 - Memory leak in long-running process
 
-**Action Required**: Fix within 24-48 hours. Schedule emergency patch if in production.
+**Action Guidance**: Schedule as near-term work. Escalate faster when the affected path is production-facing, security-sensitive, or business-critical.
 
 **Examples**:
 - XSS vulnerability in user-generated content display
@@ -55,7 +55,7 @@ Every issue identified during code analysis must be assigned one of four severit
 - Missing test coverage for non-critical paths
 - Suboptimal but functional implementation
 
-**Action Required**: Fix within current sprint or development cycle.
+**Action Guidance**: Plan within the current development cycle when it fits the team's priorities.
 
 **Examples**:
 - Function with cyclomatic complexity of 15-20
@@ -75,7 +75,7 @@ Every issue identified during code analysis must be assigned one of four severit
 - Documentation typo
 - Non-critical formatting issue
 
-**Action Required**: Fix when convenient or during refactoring.
+**Action Guidance**: Address during nearby refactoring or cleanup.
 
 **Examples**:
 - Inconsistent naming convention
@@ -96,18 +96,16 @@ Every issue identified during code analysis must be assigned one of four severit
 
 ## Escalation Rules
 
-1. **Multiple Mediums = High**: If 3+ Medium issues exist in the same function/module, escalate to High
-2. **Pattern = Higher**: If the same issue pattern repeats across the codebase, escalate severity
-3. **Context Matters**: Consider production impact, user-facing vs internal, data sensitivity
-4. **Defense in Depth**: Missing validation at multiple layers escalates severity
+1. **Clustering increases risk**: Several Medium issues in the same function or module may justify a High severity finding when they share a root cause or amplify each other.
+2. **Repeated patterns matter**: A repeated issue pattern across the codebase may deserve higher priority than an isolated instance.
+3. **Context matters**: Consider production impact, user-facing vs internal paths, data sensitivity, and blast radius.
+4. **Defense in depth matters**: Missing validation at multiple layers can raise the practical severity.
 
-## Severity Distribution Goals
+## Severity Distribution Signals
 
-A healthy codebase should have:
-- 0 Critical issues
-- 0-2 High issues per 1000 LOC
-- 5-10 Medium issues per 1000 LOC
-- 10-20 Low issues per 1000 LOC
+Use issue counts as triage signals, not hard quality targets:
 
-If Critical issues are common, prioritize security training and code review processes.
-If High issues dominate, focus on architecture and testing improvements.
+- Any Critical issue deserves immediate attention.
+- A cluster of High issues usually indicates a risky release or weak review coverage.
+- Many Medium issues in one area may indicate unclear ownership, weak tests, or architectural drift.
+- Many Low issues alone rarely justify urgent work unless they obscure important code.

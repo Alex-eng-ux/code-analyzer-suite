@@ -24,9 +24,11 @@ User Input
 
 ## Parallel Task Distribution
 
-### Method 1: Multiple Agent Windows (Recommended)
+### Method 1: Multiple Agent Windows
 
-1. Open 5 separate agent windows/conversations
+Use this when the selected dimensions are independent enough to justify parallel work.
+
+1. Open one agent window per selected dimension, usually 2-5 windows
 2. Copy each dimension task into its own window
 3. Run all analyses simultaneously
 4. Collect results and run consolidation
@@ -35,7 +37,7 @@ User Input
 - True parallel execution
 - Each agent focuses on one dimension
 - No context switching overhead
-- Scalable to large codebases
+- Scalable when the scope is large enough to offset merge overhead
 
 ### Method 2: Sequential with Dimension Switching
 
@@ -47,15 +49,15 @@ If parallel windows are not available:
 4. Continue until all dimensions complete
 5. Run consolidation
 
-**Note**: This takes 5x longer but produces the same quality output.
+**Note**: This is often better for small reviews where coordination would cost more than parallelism.
 
 ### Method 3: Hybrid Approach
 
 For large codebases:
 
 1. Split codebase into modules
-2. Run all 5 dimensions on Module 1 in parallel
-3. Then all 5 dimensions on Module 2
+2. Run the selected dimensions on Module 1 in parallel
+3. Then run the selected dimensions on Module 2
 4. Consolidate across modules
 
 ## Task Format for Agent Windows
@@ -142,9 +144,9 @@ python scripts/consolidate_report.py \
 
 ### For Small Code Snippets (<100 LOC)
 
-1. All 5 dimensions can run quickly
-2. Consider combining related dimensions (Quality + Architecture)
-3. Full analysis should complete in under 10 minutes
+1. Prefer a single focused review unless the user asks for parallel analysis
+2. Combine related dimensions, such as Quality + Architecture or Security + Logic
+3. Use all dimensions only when the snippet is security-critical or the user explicitly asks
 
 ## Quality Assurance
 
@@ -157,7 +159,7 @@ After consolidation, verify:
 
 ### Review Checklist
 - [ ] Critical issues have immediate action items
-- [ ] High issues have 24-48 hour action items
+- [ ] High issues have near-term action items
 - [ ] Medium issues have sprint-level action items
 - [ ] Low issues have backlog items
 - [ ] Positive findings balance negative issues
@@ -177,5 +179,5 @@ After consolidation, verify:
 
 ### Missing Dimensions
 - Verify dimension keywords in user request
-- Default to all dimensions if unclear
+- Default to the highest-value 2-3 dimensions if unclear
 - Ask user for clarification if needed

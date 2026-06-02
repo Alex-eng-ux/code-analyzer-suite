@@ -77,7 +77,7 @@ Identify bottlenecks, resource inefficiencies, and scalability limitations.
 1. **N+1 Queries**: Loading related data in loops
 2. **Memory Leaks**: Uncleaned event listeners, closures, caches
 3. **Blocking Async**: Synchronous I/O in async contexts
-4. **Inefficient Algorithms**: O(n²) where O(n log n) suffices
+4. **Inefficient Algorithms**: O(n^2) where O(n log n) suffices
 5. **Resource Exhaustion**: Unbounded goroutines, thread creation
 
 ### Severity Guidelines for Performance
@@ -99,12 +99,14 @@ Evaluate maintainability, readability, and adherence to best practices.
 - **Test Coverage**: Unit tests, integration tests, edge cases
 - **Maintainability**: DRY principle, single responsibility
 
-### Quality Metrics
-- **Cyclomatic Complexity**: Keep functions under 10
-- **Cognitive Complexity**: Keep functions under 15
-- **Function Length**: Under 50 lines ideally
-- **Parameter Count**: Under 4 parameters
-- **Nesting Depth**: Maximum 3 levels
+### Quality Signals
+Treat these as review signals, not automatic findings. Report an issue only when the code is hard to understand, hard to test, error-prone, or inconsistent with local conventions.
+
+- **Cyclomatic Complexity**: High branching may hide untested paths or unclear responsibility.
+- **Cognitive Complexity**: Deep conditionals, negation, and mixed abstraction levels increase review risk.
+- **Function Length**: Long functions deserve attention when they combine multiple responsibilities.
+- **Parameter Count**: Large parameter lists may indicate unclear boundaries or missing value objects.
+- **Nesting Depth**: Deep nesting can obscure error paths and early exits.
 
 ### Severity Guidelines for Quality
 - **Critical**: Untested critical paths, missing error handling
@@ -128,8 +130,8 @@ Evaluate design patterns, modularity, and long-term maintainability.
 ### Architecture Principles
 1. **SOLID**: Single responsibility, Open/closed, Liskov substitution, Interface segregation, Dependency inversion
 2. **DRY**: Don't repeat yourself
-3. **KISS**: Keep it simple, stupid
-4. **YAGNI**: You ain't gonna need it
+3. **Simplicity**: Prefer the simplest design that satisfies current requirements.
+4. **Avoid premature generality**: Do not introduce abstractions for hypothetical future needs.
 5. **Law of Demeter**: Principle of least knowledge
 
 ### Severity Guidelines for Architecture

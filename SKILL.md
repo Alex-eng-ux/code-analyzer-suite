@@ -1,171 +1,100 @@
 ---
-name: code-analyzer-skill
-description: >-
-  Parallel multi-dimensional code analysis suite. Decomposes code review tasks into 5 parallel analysis dimensions: Security, Performance, Code Quality, Architecture, and Logic Verification. Generates structured reports with severity ratings (Critical/High/Medium/Low) and consolidated summaries. Supports code snippets, file paths, and entire codebase analysis.
-license: MIT
-metadata:
-  author: Code Analyzer Suite
-  version: 1.0.0
-  created: 2026-06-02
-  last_reviewed: 2026-06-02
-  review_interval_days: 90
-  dependencies: []
-  schema_expectations: []
+name: code-analyzer-suite
+description: Analyze code through focused review dimensions such as security, performance, code quality, architecture, and logic verification. Use when the user asks to review, audit, inspect, analyze, or assess code snippets, files, modules, pull requests, or whole repositories for vulnerabilities, bottlenecks, correctness bugs, maintainability risks, architecture issues, tests, or best practices. Use as a specialized code-review decomposition skill; for non-code parallel planning use parallel-decomposer-skill instead.
 ---
 
-# /code-analyzer — Parallel Multi-Dimensional Code Analysis
+# Code Analyzer Suite
 
-You are an expert code analysis orchestrator. Your job is to decompose code review and analysis tasks into parallel subtasks across five specialized dimensions, then generate structured analysis reports.
-
-## Trigger
-
-User invokes `/code-analyzer` followed by their input:
-
-```
-/code-analyzer Review this Python API for security and performance issues
-/code-analyzer Analyze the authentication module for vulnerabilities and logic errors
-/code-analyzer Check this React component for performance, accessibility, and best practices
-/code-analyzer Audit the entire codebase for security risks
-/code-analyzer Review src/auth/login.ts for all dimensions
-```
+Use this skill to produce focused, evidence-based code analysis. It can either run as a single review or generate parallel worker prompts for separate analysis dimensions.
 
 ## Workflow
 
-### Step 1: Parse Input
+1. Identify the analysis target.
+   - Determine whether the target is an inline snippet, file, directory, module, pull request, or whole repository.
+   - Inspect local files when paths are available.
+   - Determine language, framework, runtime, and test surface from the codebase rather than guessing.
 
-Identify what the user wants analyzed:
-- **Code snippet** (inline code blocks)
-- **File path** (e.g., `src/auth/login.ts`)
-- **Directory/Module** (e.g., `authentication module`, `src/api/`)
-- **Entire codebase** (e.g., `this repo`, `the whole project`)
+2. Select only useful dimensions.
+   - Use explicit user requests first.
+   - For broad requests like "review this" or "analyze this code", start with the 2-3 highest-value dimensions based on risk.
+   - Use all five dimensions only when the user asks for "all dimensions", "full audit", "comprehensive review", or the target is large enough to justify parallel review.
 
-Determine the **programming language** from file extensions or code syntax.
+3. Analyze with evidence.
+   - Prefer concrete file and line references.
+   - Separate confirmed findings from hypotheses.
+   - Do not report generic advice as an issue unless it is tied to observed code.
+   - Include positive findings briefly when they help calibrate the report.
 
-### Step 2: Identify Relevant Dimensions
+4. Generate parallel tasks when useful.
+   - Create one task per selected dimension.
+   - Make each task self-contained enough for a fresh agent, but keep context compact.
+   - Assign ownership when two dimensions touch the same concern, such as auth logic spanning security and correctness.
+   - Provide a consolidation template after the task blocks.
 
-Based on user request, select applicable dimensions:
+5. Consolidate results.
+   - Deduplicate overlapping findings.
+   - Keep the highest justified severity.
+   - Merge related fixes into one action item when the same root cause appears in multiple dimensions.
+   - Rank by user impact, exploitability, likelihood, and fix urgency.
 
-| Dimension | Trigger Keywords | Focus Areas |
-|-----------|-----------------|-------------|
-| **Security** | security, vulnerability, auth, injection, XSS, CSRF, crypto | Authentication, authorization, input validation, data exposure, injection risks |
-| **Performance** | performance, bottleneck, slow, memory leak, optimize, N+1 | Algorithm complexity, memory usage, database queries, caching, async patterns |
-| **Code Quality** | quality, style, complexity, documentation, test, coverage | Consistency, readability, complexity metrics, docs, test coverage |
-| **Architecture** | architecture, design pattern, coupling, cohesion, scalable | Design patterns, modularity, dependencies, scalability, maintainability |
-| **Logic Verification** | logic, correctness, edge case, error handling, bug | Business logic, boundary conditions, error handling, state management |
+## Dimensions
 
-If user says "all dimensions" or doesn't specify, include all 5.
+| Dimension | Use When | Focus |
+| --- | --- | --- |
+| Security | security, vulnerability, auth, injection, secrets, XSS, CSRF, crypto | Authentication, authorization, input validation, data exposure, dependency risk |
+| Performance | performance, bottleneck, slow, memory, N+1, caching | Complexity, memory use, database queries, async behavior, rendering cost |
+| Code Quality | quality, maintainability, style, complexity, tests, docs | Readability, cohesion, duplication, testability, documentation, local conventions |
+| Architecture | architecture, design, coupling, boundaries, scalability | Module boundaries, dependencies, layering, API shape, long-term maintainability |
+| Logic Verification | bug, correctness, edge case, error handling, state | Business rules, boundary cases, null handling, failure paths, state transitions |
 
-### Step 3: Generate Parallel Analysis Tasks
+## Severity
 
-For each selected dimension, generate a self-contained analysis task with:
+Use this scale for every issue:
 
-1. **Dimension header** with name and focus
-2. **Code context** — the specific code sections to analyze
-3. **Analysis checklist** — dimension-specific items to check
-4. **Output template** — structured format with severity ratings
+| Severity | Meaning |
+| --- | --- |
+| Critical | Exploitable vulnerability, data loss, system crash, or severe correctness failure likely in production |
+| High | Significant security, correctness, performance, or maintainability risk that should be fixed soon |
+| Medium | Real issue with moderate impact or localized risk |
+| Low | Minor cleanup, hardening, or clarity improvement |
 
-Format each task so it can be copied into a separate agent window and executed independently.
+## Output Shape
 
-### Step 4: Output Parallel Task Blocks
-
-Present tasks in clearly separated blocks:
+For direct analysis, lead with findings:
 
 ```markdown
-## Parallel Task 1: Security Analysis
-[Full task with context, checklist, and template]
+## Findings
+
+1. [Severity] {Title} - {file:line}
+   {Why this is a problem, what can happen, and the concrete fix.}
+
+## Open Questions
+{Only include if uncertainty affects the recommendation.}
+
+## Notes
+{Brief positives, scope limits, or test gaps.}
+```
+
+For parallel analysis, use:
+
+```markdown
+## Parallel Task 1: {Dimension}
+Target: {files/modules}
+Context: {minimum relevant codebase facts}
+Prompt: {copy-paste-ready focused review instruction}
+Output format: {required issue format with severity, location, impact, recommendation}
 
 ---
 
-## Parallel Task 2: Performance Analysis
-[Full task with context, checklist, and template]
-
----
-
-[...remaining tasks...]
+## Consolidation Prompt
+{copy-paste-ready prompt for combining dimension reports}
 ```
 
-### Step 5: Provide Consolidated Report Template
+## Bundled Resources
 
-After all parallel tasks, provide a template for combining results:
-
-```markdown
-## Consolidated Analysis Report
-
-### Executive Summary
-- Overall Risk Level: [Critical/High/Medium/Low]
-- Dimensions Analyzed: [List]
-- Total Issues Found: [N]
-- Critical Issues Requiring Immediate Action: [N]
-
-### Dimension Summaries
-[Summary table with severity counts per dimension]
-
-### Cross-Dimensional Findings
-[Issues that span multiple dimensions]
-
-### Prioritized Action Items
-[Ranked list of all issues by severity and impact]
-
-### Recommendations
-[Specific, actionable recommendations with effort estimates]
-```
-
-## Severity Rating System
-
-Every issue must be rated with one of these severity levels:
-
-| Level | Definition | Action Required |
-|-------|-----------|----------------|
-| **Critical** | Exploitable vulnerability, data loss, system crash, security breach | Immediate fix required before deployment |
-| **High** | Significant performance impact, major logic flaw, missing auth | Fix within 24-48 hours |
-| **Medium** | Code smell, moderate complexity, incomplete documentation | Fix within current sprint |
-| **Low** | Style inconsistency, minor optimization, missing comments | Fix when convenient |
-
-## Language-Specific Context
-
-When analyzing code, consider language-specific patterns:
-
-- **Python**: Check for SQL injection in f-strings, unsafe `eval()`, missing type hints, GIL constraints
-- **JavaScript/TypeScript**: Check for prototype pollution, XSS in innerHTML, async/await errors, callback hell
-- **Java**: Check for null pointer risks, resource leaks, serialization issues, Spring Security config
-- **Go**: Check for goroutine leaks, error handling, race conditions, context cancellation
-- **Rust**: Check for unsafe blocks, lifetime issues, panic paths, unwrap() abuse
-- **SQL**: Check for injection, missing indexes, N+1 queries, transaction boundaries
-
-## Output Format Requirements
-
-Each dimension analysis must include:
-
-1. **Issues Found** — numbered list with:
-   - Issue title
-   - Location (line numbers or function names)
-   - Severity (Critical/High/Medium/Low)
-   - Description
-   - Recommendation
-
-2. **Positive Findings** — what's done well
-
-3. **Dimension Score** — optional 1-10 rating
-
-## Example Invocation and Response
-
-**User:**
-```
-/code-analyzer Review this function for security and performance:
-
-```python
-def get_user_data(user_id):
-    query = f"SELECT * FROM users WHERE id = {user_id}"
-    result = db.execute(query)
-    return result.fetchall()
-```
-```
-
-**Response:**
-
-I'll analyze this function across Security and Performance dimensions. Here are two parallel tasks you can execute in separate agent windows:
-
-[Parallel Task 1: Security Analysis]
-[Parallel Task 2: Performance Analysis]
-
-[Consolidated Report Template]
+- Read `references/analysis-dimensions.md` when choosing dimensions for a broad or ambiguous request.
+- Read `references/severity-guidelines.md` when severity decisions are contentious.
+- Read `references/parallel-execution.md` when generating worker prompts for a large codebase or pull request.
+- Read `references/output-templates.md` when the user needs a formal report.
+- Use `assets/*-template.md` files when the user asks for reusable templates or when producing parallel task prompts.
+- Use scripts in `scripts/` only after inspecting their arguments and behavior; they are helpers, not required for every review.
