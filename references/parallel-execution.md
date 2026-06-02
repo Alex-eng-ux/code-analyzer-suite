@@ -28,10 +28,12 @@ User Input
 
 Use this when the selected dimensions are independent enough to justify parallel work.
 
-1. Open one agent window per selected dimension, usually 2-5 windows
-2. Copy each dimension task into its own window
-3. Run all analyses simultaneously
-4. Collect results and run consolidation
+1. Create a short handoff brief with the shared target, scope, code version, severity rules, and non-goals
+2. Open one agent window per selected dimension, usually 2-5 windows
+3. Paste or point each worker to the handoff brief before the dimension task
+4. Copy each dimension task into its own window
+5. Run all analyses simultaneously
+6. Collect results and run consolidation
 
 **Advantages**:
 - True parallel execution
@@ -65,9 +67,17 @@ For large codebases:
 Each parallel task should be self-contained:
 
 ```markdown
+# Handoff Brief
+Target: {files/modules}
+Code version: {branch, commit, or changed files}
+Shared context: {framework, runtime, architecture notes, constraints}
+Scope: {what is included and excluded}
+Worker rule: Read this brief before starting the dimension task.
+
 # Task: {Dimension} Analysis
 
 ## Context
+Read the Handoff Brief first.
 You are a {dimension} specialist analyzing code.
 
 ## Code to Analyze

@@ -27,7 +27,9 @@ Use this skill to produce focused, evidence-based code analysis. It can either r
 
 4. Generate parallel tasks when useful.
    - Create one task per selected dimension.
+   - Produce a short handoff brief for fresh agent threads before listing dimension tasks.
    - Make each task self-contained enough for a fresh agent, but keep context compact.
+   - Tell each task to read the handoff brief first, then focus only on its assigned dimension.
    - Assign ownership when two dimensions touch the same concern, such as auth logic spanning security and correctness.
    - Provide a consolidation template after the task blocks.
 
@@ -78,9 +80,15 @@ For direct analysis, lead with findings:
 For parallel analysis, use:
 
 ```markdown
+## Handoff Brief
+Target: {files/modules}
+Shared context: {language, framework, relevant architecture, constraints}
+Scope: {what is included and excluded}
+Worker rule: Read this brief before starting your dimension review.
+
 ## Parallel Task 1: {Dimension}
 Target: {files/modules}
-Context: {minimum relevant codebase facts}
+Context: Read the Handoff Brief first. {minimum dimension-specific facts}
 Prompt: {copy-paste-ready focused review instruction}
 Output format: {required issue format with severity, location, impact, recommendation}
 
