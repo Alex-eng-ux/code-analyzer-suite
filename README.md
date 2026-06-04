@@ -22,6 +22,7 @@ Use the original skill when you want explicit worker prompts or need to support 
 - Shared orchestration brief for all workers
 - Consolidation-oriented output for orchestrator agents
 - Manual fallback prompts only when automatic execution is unavailable
+- Trigger boundary that keeps ordinary single-agent reviews on the original skill
 
 ## Features
 
@@ -42,6 +43,17 @@ For general-purpose task decomposition, use [parallel-decomposer-skill](https://
 ```bash
 ./install.sh
 ```
+
+The quick installer targets the original `code-analyzer-suite`. Install `code-analyzer-auto` as a separate skill directory when your runtime supports auto-discovery of multiple skills.
+
+### Install Auto Skill
+
+```bash
+cp -R code-analyzer-auto ~/.codex/skills/code-analyzer-auto
+cp -R code-analyzer-auto ~/.agents/skills/code-analyzer-auto
+```
+
+Use the first path for Codex and the second path for universal agent runtimes. On Windows, copy `code-analyzer-auto` to the matching skills directory for your tool.
 
 ### Manual Install by Platform
 
@@ -97,17 +109,20 @@ Use $code-analyzer-auto to review this pull request by dispatching Security, Per
 
 ```text
 code-analyzer-suite/
-├── SKILL.md
-├── code-analyzer-auto/
-│   ├── SKILL.md
-│   ├── agents/openai.yaml
-│   ├── assets/orchestration-brief-template.md
-│   └── references/orchestration-guide.md
-├── agents/
-├── assets/
-├── references/
-├── scripts/
-└── evals/
+|-- SKILL.md
+|-- AGENTS.md
+|-- code-analyzer-auto/
+|   |-- SKILL.md
+|   |-- AGENTS.md
+|   |-- agents/openai.yaml
+|   |-- assets/orchestration-brief-template.md
+|   |-- references/orchestration-guide.md
+|   `-- evals/code-analyzer-auto.eval.md
+|-- agents/
+|-- assets/
+|-- references/
+|-- scripts/
+`-- evals/
 ```
 
 ## License

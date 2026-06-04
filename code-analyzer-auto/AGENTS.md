@@ -8,7 +8,7 @@ An orchestration-first code review skill for runtimes that can dispatch sub-agen
 
 This skill activates when the user:
 
-- Asks for a code review, audit, or analysis in an environment that supports sub-agents or worker threads
+- Asks for a code review, audit, or analysis using automatic orchestration, sub-agents, worker threads, or multi-agent dispatch
 - Wants Security, Performance, Code Quality, Architecture, or Logic analysis to run concurrently
 - Requests automatic orchestration, automatic dispatch, multi-agent review, or worker-thread review
 - Wants a findings-first consolidated report without manually copying prompts between windows
@@ -22,6 +22,8 @@ This skill activates when the user:
 5. Dispatch one worker per selected dimension when the runtime supports it
 6. Fall back to copy-paste-ready worker prompts if automatic dispatch is unavailable
 7. Consolidate findings into a single report
+
+Ask for clarification only when the target or scope is ambiguous enough to change the worker split.
 
 ## Output
 

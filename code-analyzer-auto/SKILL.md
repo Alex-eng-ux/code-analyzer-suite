@@ -1,11 +1,11 @@
 ---
 name: code-analyzer-auto
-description: Automatically orchestrate multi-dimensional code review across sub-agents or worker threads, then consolidate findings into one report. Use when the runtime supports sub-agents, concurrent workers, or automatic orchestration and the user wants a code review, audit, or deep analysis across security, performance, code quality, architecture, and logic dimensions. If automatic worker execution is unavailable, fall back to producing copy-paste-ready worker prompts.
+description: Automatically orchestrate multi-dimensional code review across sub-agents or worker threads, then consolidate findings into one report. Use when the user asks for automatic orchestration, sub-agents, concurrent workers, multi-agent review, worker-thread review, or auto-dispatched code analysis across security, performance, code quality, architecture, and logic dimensions. For ordinary single-agent or manual prompt code review, use code-analyzer-suite instead. If automatic worker execution is unavailable, fall back to producing copy-paste-ready worker prompts.
 ---
 
 # Code Analyzer Auto
 
-Use this skill when the environment can dispatch work to sub-agents or worker threads. Prefer automatic orchestration over manual multi-window workflows. If automatic orchestration is unavailable, emit worker prompts as a fallback.
+Use this skill when the environment can dispatch work to sub-agents or worker threads. Treat automatic orchestration as the primary path. Emit manual worker prompts only as a fallback when automatic orchestration is unavailable.
 
 ## Workflow
 
@@ -13,11 +13,13 @@ Use this skill when the environment can dispatch work to sub-agents or worker th
    - Determine whether the target is a snippet, file, module, pull request, or repository area.
    - Inspect local files and surrounding context before selecting dimensions.
    - Determine language, framework, and likely risk areas from the codebase.
+   - Ask a clarifying question only when the review target or write/read scope is ambiguous enough to change the worker split.
 
 2. Select dimensions.
    - Start with the dimensions the user explicitly asked for.
    - For broad requests, choose the 2-3 highest-value dimensions first.
    - Use all five dimensions only when the target is large, high-risk, or the user asked for a comprehensive audit.
+   - Avoid dispatching redundant workers when a narrower review would produce a clearer result.
 
 3. Produce a shared orchestration brief.
    - Include the target, scope, relevant files, language/framework, shared constraints, severity rules, and final report shape.
@@ -27,6 +29,7 @@ Use this skill when the environment can dispatch work to sub-agents or worker th
    - If sub-agent execution is available, dispatch one worker per selected dimension.
    - Give each worker the shared orchestration brief and a narrow dimension-specific assignment.
    - If sub-agent execution is unavailable, emit copy-paste-ready worker prompts for manual fallback.
+   - Do not present manual copy-paste as the main workflow when automatic dispatch is available.
 
 5. Consolidate findings.
    - Deduplicate overlapping issues.

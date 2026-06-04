@@ -10,6 +10,8 @@
 ### Content Validation
 - [ ] `SKILL.md` frontmatter contains `name: code-analyzer-auto`
 - [ ] `SKILL.md` describes automatic dispatch first and manual fallback second
+- [ ] `SKILL.md` limits auto triggering to orchestration, sub-agent, concurrent worker, or multi-agent review contexts
+- [ ] `SKILL.md` says ordinary single-agent or manual reviews should use the parent skill
 - [ ] `AGENTS.md` mentions orchestration brief, worker dispatch, and fallback prompts
 - [ ] `agents/openai.yaml` matches the skill name and intent
 
@@ -26,6 +28,7 @@ Use $code-analyzer-auto to review this pull request by dispatching Security, Per
 - Produces three worker specs
 - Emphasizes automatic worker dispatch
 - Includes one consolidated report format
+- Does not tell the user to manually copy prompts as the primary path
 
 ### Case 2: Manual Fallback
 **Input**
@@ -48,3 +51,14 @@ Use $code-analyzer-auto to review this function for security and logic issues.
 - Selects Security and Logic only
 - Does not force all five dimensions
 - Produces a findings-first consolidated output shape
+
+### Case 4: Trigger Boundary
+**Input**
+```text
+Review src/auth/login.ts for security issues.
+```
+
+**Expected**
+- Does not require the auto skill unless the user requested orchestration or sub-agents
+- Routes ordinary single-agent review intent to the parent `code-analyzer-suite`
+- Keeps manual worker prompts out of the main path
