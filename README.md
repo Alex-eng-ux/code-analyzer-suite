@@ -11,6 +11,10 @@ A parallel multi-dimensional code analysis skill suite that decomposes code revi
 - **Consolidated Reports**: Automatic merging of dimension results into unified reports
 - **Flexible Input**: Accepts code snippets, file paths, or entire codebase references
 
+## Related Skill
+
+For general-purpose task decomposition (non-code parallel planning), use [parallel-decomposer-skill](https://github.com/Alex-eng-ux/parallel-decomposer-skill) instead. This skill focuses on code-specific multi-dimensional analysis.
+
 ## Installation
 
 ### Quick Install
@@ -22,26 +26,31 @@ A parallel multi-dimensional code analysis skill suite that decomposes code revi
 ### Manual Install by Platform
 
 **Claude Code:**
+
 ```bash
 cp -R code-analyzer-suite ~/.claude/skills/code-analyzer-suite
 ```
 
 **GitHub Copilot (project-level):**
+
 ```bash
 cp -R code-analyzer-suite .github/skills/code-analyzer-suite
 ```
 
 **Cursor (project-level):**
+
 ```bash
 cp -R code-analyzer-suite .cursor/skills/code-analyzer-suite
 ```
 
 **Windsurf:**
+
 ```bash
 cp -R code-analyzer-suite ~/.codeium/windsurf/skills/code-analyzer-suite
 ```
 
 **Universal (all platforms):**
+
 ```bash
 cp -R code-analyzer-suite ~/.agents/skills/code-analyzer-suite
 ```
@@ -68,20 +77,23 @@ Once installed, invoke with:
 | **Architecture** | Design patterns, coupling, scalability | architecture, design pattern, coupling, scalable |
 | **Logic Verification** | Correctness, edge cases, error handling | logic, correctness, edge case, error handling |
 
-## Workflow
+## Severity Ratings
 
-1. **Parse Input**: Identify code and target dimensions from user request
-2. **Generate Tasks**: Create parallel analysis tasks for each dimension
-3. **Execute in Parallel**: Run each task in separate agent windows
-4. **Collect Results**: Gather dimension analysis outputs
-5. **Consolidate**: Merge into unified report with prioritized action items
+| Level | Action Required | Timeline |
+|-------|----------------|----------|
+| **Critical** | Immediate fix before deployment | Now |
+| **High** | Fix within 24-48 hours | 1-2 days |
+| **Medium** | Fix within current sprint | 1-2 weeks |
+| **Low** | Fix when convenient | Backlog |
 
-## Directory Structure
+## Skill Structure
 
 ```
 code-analyzer-suite/
-├── SKILL.md                    # Main skill definition
+├── SKILL.md                    # Core skill definition and workflow (for agents)
 ├── AGENTS.md                   # Cross-platform agent instructions
+├── README.md                   # This file
+├── install.sh                  # Cross-platform installer
 ├── scripts/
 │   ├── generate_tasks.py       # Task generator
 │   ├── consolidate_report.py   # Report merger
@@ -100,55 +112,9 @@ code-analyzer-suite/
 │   ├── architecture-template.md# Architecture template
 │   ├── logic-template.md       # Logic template
 │   └── consolidated-template.md# Report template
-├── evals/
-│   └── code-analyzer.eval.md   # Evaluation spec
-├── install.sh                  # Cross-platform installer
-└── README.md                   # This file
+└── evals/
+    └── code-analyzer.eval.md   # Evaluation spec
 ```
-
-## Scripts
-
-### Generate Tasks
-```bash
-python scripts/generate_tasks.py \
-  --request "Review for security issues" \
-  --file src/auth.py \
-  --output tasks.json
-```
-
-### Consolidate Reports
-```bash
-python scripts/consolidate_report.py \
-  security-result.md performance-result.md \
-  --output consolidated-report.md
-```
-
-### Run Pipeline
-```bash
-python scripts/run_pipeline.py \
-  --request "Full analysis" \
-  --file src/app.py \
-  --output-dir ./reports
-```
-
-### Validate Installation
-```bash
-python scripts/check_pipeline.py
-```
-
-### Run Evaluations
-```bash
-python scripts/run_evals.py --validate
-```
-
-## Severity Ratings
-
-| Level | Action Required | Timeline |
-|-------|----------------|----------|
-| **Critical** | Immediate fix before deployment | Now |
-| **High** | Fix within 24-48 hours | 1-2 days |
-| **Medium** | Fix within current sprint | 1-2 weeks |
-| **Low** | Fix when convenient | Backlog |
 
 ## Requirements
 
