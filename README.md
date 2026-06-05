@@ -7,6 +7,15 @@ This repository contains two related skills:
 
 Use the original skill when you want explicit worker prompts or need to support older environments. Use the auto version when the runtime can orchestrate parallel workers directly.
 
+## Which Version Should You Use?
+
+| Variant | Use it when | Avoid it when |
+| --- | --- | --- |
+| `code-analyzer-suite` | You want explicit review dimensions, visible worker prompts, or a manual fallback path | Your runtime can already dispatch review workers automatically and you want the orchestration version |
+| `code-analyzer-auto` | Your runtime can orchestrate sub-agents or worker threads and you want consolidated auto-dispatched review | You need the review flow to stay manual, copy-pasteable, or compatible with older environments |
+
+The subject matter is the same in both versions. The difference is the execution model: manual or mixed review orchestration versus auto-dispatched review orchestration.
+
 ## Skills In This Repo
 
 ### `code-analyzer-suite`
@@ -52,6 +61,14 @@ The companion repositories answer different questions:
 - `iterative-implementation-review`: how should implementation, critique, repair, and verification be looped together?
 
 That separation is intentional. This repository should stay focused on evidence-based review rather than owning the whole implementation workflow.
+
+## Repository Roles At A Glance
+
+| Repository | Primary job | Typical output |
+| --- | --- | --- |
+| `parallel-decomposer-skill` | split work safely | task cards or worker specs |
+| `code-analyzer-suite` | review changed code | findings and severity-ranked risks |
+| `iterative-implementation-review` | keep looping until the implementation survives review | repaired implementation plus verification status |
 
 ## Installation
 
