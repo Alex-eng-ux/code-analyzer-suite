@@ -36,6 +36,23 @@ Use the original skill when you want explicit worker prompts or need to support 
 
 For general-purpose task decomposition, use [parallel-decomposer-skill](https://github.com/Alex-eng-ux/parallel-decomposer-skill).
 
+For the workflow layer that uses this repository as a review gate, see [iterative-implementation-review](https://github.com/Alex-eng-ux/iterative-implementation-review).
+
+If you want the full packaged workflow, see [implementation-workflows](https://github.com/Alex-eng-ux/implementation-workflows).
+
+## Relationship To The Other Repositories
+
+This repository answers the question:
+
+- how should changed code be reviewed across multiple dimensions?
+
+The companion repositories answer different questions:
+
+- `parallel-decomposer-skill`: how should work be split safely?
+- `iterative-implementation-review`: how should implementation, critique, repair, and verification be looped together?
+
+That separation is intentional. This repository should stay focused on evidence-based review rather than owning the whole implementation workflow.
+
 ## Installation
 
 ### Quick Install
